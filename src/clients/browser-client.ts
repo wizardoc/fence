@@ -1,10 +1,13 @@
-import {AxiosError, AxiosStatic} from 'axios';
+import { AxiosError, AxiosStatic } from "axios";
+import { OperatorService } from "../services";
 
-import {ErrorInteractProcessor, ErrorMessage} from './error';
+import { ErrorInteractProcessor, ErrorMessage } from "../core/error";
+import { RawOperator } from "../core/operation";
+import { RequestHook } from "../module";
 
 type Request<R = any> = () => R;
 
-export type Response<R = any> = Promise<ResValueArea<R>>;
+export type Response<R = any> = any;
 
 type Requests<R> = {
   [index in HttpType]: Request<R>;
@@ -14,10 +17,7 @@ interface Doer<R> {
   Do(): Response<R>;
 }
 
-export type ResValueArea<R = any> = Expectable<R> &
-  Successable<R> &
-  Result<R> &
-  Pipable<R>;
+export type ResValueArea<R = any> = any;
 
 export type ExpectableCB = (err: AxiosError) => ErrorMessage;
 
@@ -44,10 +44,10 @@ export interface Result<R> extends Successable<R> {
 }
 
 export type ExpectFn = () => string | void;
-export type SimpleHTTPMethod = 'GET' | 'HEAD';
-export type ComplexHTTPMethod = 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+export type SimpleHTTPMethod = "GET" | "HEAD";
+export type ComplexHTTPMethod = "POST" | "PUT" | "DELETE" | "PATCH";
 export type HTTPMethod = SimpleHTTPMethod | ComplexHTTPMethod;
-export type HttpType = 'SimpleHTTPMethod' | 'ComplexHTTPMethod';
+export type HttpType = "SimpleHTTPMethod" | "ComplexHTTPMethod";
 
 interface DispatchPayload<T> {
   method: HTTPMethod;
@@ -60,10 +60,11 @@ export interface HTTPClientOptions {
   addr: string;
   axios: AxiosStatic;
   catcher: ErrorInteractProcessor;
+  operators: RawOperator[];
 }
 
 export enum ContentType {
-  Form = 'application/x-www-form-urlencoded',
+  Form = "application/x-www-form-urlencoded",
 }
 
 export interface HTTPClient {
@@ -74,14 +75,14 @@ export class BrowserClient {
   constructor(private options: HTTPClientOptions) {}
 
   create<T, R>(type: HttpType, payload: DispatchPayload<T>): Doer<R> {
-    const {path, data, headers, method} = payload;
+    const { path, data, headers, method } = payload;
     const lowerCaseMethod = method.toLowerCase();
 
     const requests: Requests<R> = {
       ComplexHTTPMethod: () =>
         this.options.axios[lowerCaseMethod]<R>(this.join(path), data || {}, {
           headers: {
-            'Content-Type': ContentType.Form,
+            "Content-Type": ContentType.Form,
             ...headers,
           },
         }),
@@ -100,59 +101,17 @@ export class BrowserClient {
   }
 
   private Do<R>(request: Request<R>): Response<R> {
-    let err: AxiosError | undefined;
-    let data: R | undefined;
+    return this.sendRequest(request);
+  }
 
-    const sendRequest = async (): Promise<ResValueArea<R>> => {
-      try {
-        data = await request();
-      } catch (e) {
-        err = e;
-      }
+  private sendRequest<R>(request: Request<R>): any {
+    const operatorService = new OperatorService(this.options.operators);
 
-      const valueArea: ResValueArea<R> = {
-        data,
-        ok: !err,
-        success: onSuccuss,
-        expect: onExpect,
-        pipe,
-      };
-      const that = this;
-
-      function pipe(cb: OnSuccessCB<R>): ResValueArea {
-        return {
-          ...valueArea,
-          data: cb(data),
-        };
-      }
-
-      function onSuccuss(cb: OnSuccessCB<R>): ResValueArea {
-        return {
-          ...valueArea,
-          data: err ? data : cb(data),
-        };
-      }
-
-      function onExpect(cb: ExpectableCB): ResValueArea {
-        if (err) {
-          const errMsg = cb(err);
-
-          if (errMsg !== undefined || errMsg !== null) {
-            that.options.catcher(errMsg, err);
-          }
-        }
-
-        return valueArea;
-      }
-
-      return valueArea;
-    };
-
-    return sendRequest();
+    return operatorService.parseOperators(this.options.catcher, request);
   }
 
   private join(path: string): string {
-    if (path.startsWith('http')) {
+    if (path.startsWith("http")) {
       return path;
     }
 

@@ -1,22 +1,19 @@
-import 'reflect-metadata';
-import {BrowserClient, getErrorInteractFromModule, Interceptor} from '../core';
-import {
-  HTTPModuleMetadata,
-  HTTP_MODULE_METADATA_KEY,
-  getHooksFromModule,
-} from '../module';
-import {HTTPService} from './http-service';
-import Axios from 'axios';
-import {ServerConfig} from '../services';
+import "reflect-metadata";
+import { getErrorInteractFromModule, Interceptor } from "../core";
+import { HTTPModuleMetadata, HTTP_MODULE_METADATA_KEY } from "../module";
+import { HTTPService } from "./http-service";
+import Axios from "axios";
+import { ServerConfig } from "../services";
+import { BrowserClient } from "../clients";
 
 const NOT_A_MODULE_ERROR_MESSAGE =
-  'HTTP Factory cannot create a service base on the module, please make sure the params has been decorated by @HTTPModule.';
+  "HTTP Factory cannot create a service base on the module, please make sure the params has been decorated by @HTTPModule.";
 
 export class HTTPFactory {
   static create(Module: any) {
     const moduleMetadata: HTTPModuleMetadata = Reflect.getMetadata(
       HTTP_MODULE_METADATA_KEY,
-      Module,
+      Module
     );
 
     // Check the params whether is module or not
@@ -28,7 +25,6 @@ export class HTTPFactory {
     const module = new Module();
 
     const interceptor = new Interceptor(Axios);
-    const hooks = getHooksFromModule(module);
     const errorInteract = getErrorInteractFromModule(module);
     const serverConfig = new ServerConfig(moduleMetadata.server);
 
@@ -39,8 +35,9 @@ export class HTTPFactory {
       addr: serverConfig.getAbsPath(),
       axios: Axios,
       catcher: errorInteract,
+      operators: moduleMetadata.operators ?? [],
     });
 
-    return new HTTPService(client, hooks);
+    return new HTTPService(client);
   }
 }

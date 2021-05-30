@@ -1,5 +1,6 @@
-import {HTTPMethod, Response, HttpType, HTTPClient} from '../core';
-import {RequestHook} from '../module';
+import { HTTPMethod, Response, HttpType, HTTPClient } from "../clients";
+import { RequestHook } from "../module";
+import { OperatorResponse } from "../services";
 
 export interface PostPayload<T = unknown> {
   [index: string]: T;
@@ -13,54 +14,34 @@ export interface RequestOptions {
 export type PartialRequestOptions = Partial<RequestOptions>;
 
 export class HTTPService {
-  constructor(private client: HTTPClient, private hooks: RequestHook) {}
+  constructor(private client: HTTPClient) {}
 
-  get<R = any, T = {}>(
-    path: string,
-    data?: T,
-    options?: PartialRequestOptions,
-  ): Response<R> {
-    return this.simpleRequest('GET', path, data, options);
+  get<T = {}>(path: string, data?: T, options?: PartialRequestOptions) {
+    return this.simpleRequest("GET", path, data, options);
   }
 
-  post<R = any, T = {}>(
-    path: string,
-    data?: T,
-    options?: PartialRequestOptions,
-  ): Response<R> {
-    return this.complexRequest('POST', path, data, options);
+  post<T = {}>(path: string, data?: T, options?: PartialRequestOptions) {
+    return this.complexRequest("POST", path, data, options);
   }
 
-  put<R = any, T = {}>(
-    path: string,
-    data?: T,
-    options?: PartialRequestOptions,
-  ): Response<R> {
-    return this.complexRequest('PUT', path, data, options);
+  put<T = {}>(path: string, data?: T, options?: PartialRequestOptions) {
+    return this.complexRequest("PUT", path, data, options);
   }
 
-  delete<R = any, T = {}>(
-    path: string,
-    data?: T,
-    options?: PartialRequestOptions,
-  ): Response<R> {
-    return this.complexRequest('DELETE', path, data, options);
+  delete<T = {}>(path: string, data?: T, options?: PartialRequestOptions) {
+    return this.complexRequest("DELETE", path, data, options);
   }
 
   // Common request function that is wrapper of all request function, in other words
   // it can do anything before send real request or intercept response
-  private async request<R = any, T = {}>(
+  private request<R = any, T = {}>(
     type: HttpType,
     method: HTTPMethod,
     path: string,
     data?: T,
-    options?: PartialRequestOptions,
-  ): Response<R> {
-    const {beforeRequest, afterResponse} = this.hooks;
-
-    beforeRequest(method, path, data, options?.headers);
-
-    const result = await this.client
+    options?: PartialRequestOptions
+  ): OperatorResponse {
+    return this.client
       .create<T, R>(type, {
         method,
         path,
@@ -68,27 +49,23 @@ export class HTTPService {
         headers: options?.headers ?? {},
       })
       .Do();
-
-    afterResponse(result);
-
-    return result;
   }
 
-  private complexRequest<R = any, T = {}>(
+  private complexRequest<T = {}>(
     method: HTTPMethod,
     path: string,
     data?: T,
-    options?: PartialRequestOptions,
-  ): Response<R> {
-    return this.request('ComplexHTTPMethod', method, path, data, options);
+    options?: PartialRequestOptions
+  ) {
+    return this.request("ComplexHTTPMethod", method, path, data, options);
   }
 
-  private simpleRequest<R = any, T = {}>(
+  private simpleRequest<T = {}>(
     method: HTTPMethod,
     path: string,
     data?: T,
-    options?: PartialRequestOptions,
-  ): Response<R> {
-    return this.request('SimpleHTTPMethod', method, path, data, options);
+    options?: PartialRequestOptions
+  ) {
+    return this.request("SimpleHTTPMethod", method, path, data, options);
   }
 }

@@ -1,6 +1,8 @@
 {
-  "extends": "../../node_modules/@magicspace/configs/tsconfig.json",
   "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "target": "ES5",
     "rootDir": "src",
     "lib": ["dom", "esnext"],
     "outDir": "dist",

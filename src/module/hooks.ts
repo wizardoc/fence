@@ -1,11 +1,11 @@
-import {HTTPMethod, ResValueArea} from '../core';
+import { HTTPMethod, ResValueArea } from "../clients";
 
 export interface RequestHook {
   beforeRequest(
     method: HTTPMethod,
     path: string,
     data?: any,
-    headers?: any,
+    headers?: any
   ): void | Promise<void>;
   afterResponse(result: ResValueArea): void | Promise<void>;
 }
@@ -23,7 +23,7 @@ export const getHooksFromModule = (module: any): RequestHook => {
     return HOOK_NOOP;
   }
 
-  const {beforeRequest, afterResponse} = module;
+  const { beforeRequest, afterResponse } = module;
 
   return {
     ...HOOK_NOOP,
