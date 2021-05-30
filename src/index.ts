@@ -1,2 +1,5 @@
-export * from 'axios';
-export * from './lib';
+export * from "axios";
+export * from "./core";
+export * from "./factory";
+export * from "./module";
+export * from "./services";
