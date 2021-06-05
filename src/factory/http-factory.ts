@@ -3,14 +3,14 @@ import { getErrorInteractFromModule, Interceptor } from "../core";
 import { HTTPModuleMetadata, HTTP_MODULE_METADATA_KEY } from "../module";
 import { HTTPService } from "./http-service";
 import Axios from "axios";
-import { ServerConfig } from "../services";
+import { OperatorResponse, OperatorService, ServerConfig } from "../services";
 import { BrowserClient } from "../clients";
 
 const NOT_A_MODULE_ERROR_MESSAGE =
   "HTTP Factory cannot create a service base on the module, please make sure the params has been decorated by @HTTPModule.";
 
 export class HTTPFactory {
-  static create(Module: any) {
+  static create(Module: any): OperatorResponse {
     const moduleMetadata: HTTPModuleMetadata = Reflect.getMetadata(
       HTTP_MODULE_METADATA_KEY,
       Module
@@ -38,6 +38,16 @@ export class HTTPFactory {
       operators: moduleMetadata.operators ?? [],
     });
 
-    return new HTTPService(client);
+    const operatorService = new OperatorService(moduleMetadata.operators);
+    const httpService = new HTTPService(client);
+
+    // Return a new operatorSet when call http every time
+    return new Proxy(
+      {},
+      {
+        get: (_: any, key: string) =>
+          operatorService.parseOperators(errorInteract, httpService)[key],
+      }
+    ) as unknown as OperatorResponse;
   }
 }

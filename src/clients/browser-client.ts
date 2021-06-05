@@ -101,14 +101,14 @@ export class BrowserClient {
   }
 
   private Do<R>(request: Request<R>): Response<R> {
-    return this.sendRequest(request);
+    return request();
   }
 
-  private sendRequest<R>(request: Request<R>): any {
-    const operatorService = new OperatorService(this.options.operators);
+  // private sendRequest<R>(request: Request<R>): any {
+  //   const operatorService = new OperatorService(this.options.operators);
 
-    return operatorService.parseOperators(this.options.catcher, request);
-  }
+  //   return operatorService.parseOperators(this.options.catcher, request);
+  // }
 
   private join(path: string): string {
     if (path.startsWith("http")) {

@@ -1,42 +1,39 @@
 import {
   HTTPModule,
   HTTPFactory,
-  RequestHook,
-  ErrorInteractModule,
   AxiosError,
+  ErrorInteractModule,
   ErrorMessage,
 } from "../../../..";
 import ServerConfig from "../configs/sever-config.json";
 import { RequestLogger } from "./interceptors/request-logger.interceptor";
+import { WithOk } from "./operators/ok-operator.pipe";
 
 @HTTPModule({
   server: ServerConfig,
+  operators: [WithOk],
   interceptors: [RequestLogger],
 })
-export class AppModule implements RequestHook, ErrorInteractModule {
-  errorInteract(errMsg: ErrorMessage, err: AxiosError): void {
-    console.info(errMsg);
-  }
-
-  beforeRequest() {
-    console.info("before request");
-  }
-
-  afterResponse() {
-    console.info("after response");
-  }
+export class AppModule implements ErrorInteractModule {
+  errorInteract(errMsg: ErrorMessage, err: AxiosError): void {}
 }
 
-const http = HTTPFactory.create(AppModule);
+export async function main() {
+  const http = HTTPFactory.create(AppModule);
 
-(async () => {
+  // const { avatar, ok } = await http
+  // .get("/users/youncccat")
+  // .pipe(({ data }) => data.avatar_url)
+  // .pipe((avatar) => ({ avatar }))
+  // .withOk()
+  // .expect(() => "Network Error");
+
   const res = await http
-    .get("/users/youncccat")
-    .pipe((v) => v)
-    .match(
-      (data: unknown) => data,
-      (err: AxiosError) => console.info(err.message)
-    );
+    .get("/urs/youncccat")
+    .post("/")
+    .expect(() => "");
 
   console.info(res);
-})();
+}
+
+main();

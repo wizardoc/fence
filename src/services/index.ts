@@ -1,2 +1,2 @@
 export * from "./configure";
-export * from "./operator-service";
+export * from "./operator";
