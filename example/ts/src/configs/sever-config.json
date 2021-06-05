@@ -1,6 +1,4 @@
 {
   "baseUrl": "api.github.com",
-  "port": 80,
-  "protocol": "https",
-  "mode": "prod"
+  "protocol": "https"
 }
