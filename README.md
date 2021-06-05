@@ -1,5 +1,5 @@
 <div align="center">
-  <img width="800px" src="https://github.com/wizardoc/http-request/blob/main/doc/logo-with-text.png" />
+  <img width="700px" src="https://github.com/wizardoc/http-request/blob/main/doc/logo-with-text.png" />
 </div>
 
 ## What's Fence🐟
@@ -65,7 +65,7 @@ main();
 ## Operator system
 The Operator system are the CORE of the `Fence`, in other word the `Fence` is designed to be based on operator system.
 
-<img height="100px" src="https://github.com/wizardoc/http-request/blob/main/doc/request-flow.png" />
+<img src="https://github.com/wizardoc/http-request/blob/main/doc/request-flow.png" />
 
 As you can see the request is just like a flow, and you can define a lot of pipe-operator to manipulate the response data before terminated the request flow. For instance, I wanna get `avatar_url` of `youncccat` from GitHub. 
 
