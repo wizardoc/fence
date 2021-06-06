@@ -2,24 +2,24 @@
   <img width="700px" src="https://github.com/wizardoc/http-request/blob/main/doc/logo-with-text.png" />
 </div>
 
-English | [中文文档](doc/README-zh.md)
+[English](../README.md) | 中文文档
 
-## What's Fence🐟
+## 什么是 Fence🐟
 
-Fence is an operator-based request library that provide a serises of APIs to help you more easily manipulate the request flow. And the `Fence` is works fine in browsers and server as well, cause `Fence` is based on Axios by default.
+`Fence` 是一个基于操作符的请求库，它提供了一系列 API 来帮助您更轻松地操作请求流。因为`Fence` 默认基于 Axios，所以`Fence` 在浏览器和服务器中也可以正常工作。
 
-## Feature
+## 特性
 
-- 🌊 **Operator-based** The `Fence` whole system is operator-based, the means that you can define a lot of `operator` to do something with request data in the request flow, and there are 8 build-in operator, you can working fine with these operators.
-- 🍵 **Object-oriented** If you like `Object-Oriented Programing`, this library is perfect for you, we will cover `Function API` in the future.
-- 🚴 **lightweight** We have not provide a lot of `operator` for users, cause users can define them own operator and combine them into new operator.
-- 🙅‍♂️ **Perfect error handing system** Many developers often forget or incorrectly handing error which come from the request flow, `Fence` will force you to handing these errors or ignore these error by explicit, it can help developers understanding what they are doing rather than forget handing these errors.
-- ⚙️ **Removable** That is you can use the operator that you wanna use, the same you can remove the operator that you don't wanna use.
-- 🏹️ **Flexible** You can combine existing operators to create more possibilities.
+- 🌊 **基于操作符**`Fence`整个系统是基于操作符的，并且内置了 8 个 操作符。你可以自定义一些`操作符`来配合内置的`操作符`一起完成数据请求。
+- 🍵 **面向对象** 如果你喜欢`面向对象编程`，那么这个库非常适合你，并且我们会在将来支持`Function API`。
+- 🚴 **轻量级** 我们没有为用户提供很多`操作符`，因为用户可以自定义 操作符 ，并将它们组合成新的 操作符。
+- 🙅‍♂️ **完善的错误处理系统** 许多开发人员经常忘记或错误地处理来自请求流的错误，`Fence` 将强制您处理这些错误或显式忽略这些错误，它可以你思路更加清晰。
+- ⚙️ **可拆卸** 你可以根据需求来决定要使用那些`操作符`，也可以删除一些没有使用到的`操作符`。
+- 🏹️ **灵活性** 你可以结合现有的`操作符`来创造更多的。`操作符`。
 
-## Usage
+## 用法
 
-You can install `Fence` with NPM and YARN as well.
+你可以使用`yarn`或者`npm`来安装`Fence`。
 
 ```sh
 # YARN
@@ -29,7 +29,7 @@ yarn add @wizardoc/fence
 npm i @wizardoc/fence
 ```
 
-### Simple example
+### 案例
 
 ```ts
 import {
@@ -63,15 +63,15 @@ export async function main() {
 main();
 ```
 
-> You can see [Example](https://github.com/wizardoc/http-request/tree/main/example) for more detail.
+> 你可以查看更多详细的[案例](https://github.com/wizardoc/http-request/tree/main/example).
 
-## Operator system
+## 操作符系统
 
-The Operator system are the CORE of the `Fence`, in other word the `Fence` is designed to be based on operator system.
+操作符系统是`Fence`的核心，换句话说，`Fence`是基于操作系统设计的。
 
 <img src="https://github.com/wizardoc/http-request/blob/main/doc/request-flow.png" />
 
-As you can see the request is just like a flow, and you can define a lot of pipe-operator to manipulate the response data before terminated the request flow. For instance, I wanna get `avatar_url` of `youncccat` from GitHub.
+如你所见，请求就像一个流，你可以定义一些管道操作符，在数据响应之前终止请求。例如，我想从 GitHub 获取 `youncccat` 的 `avatar_url`。
 
 ```ts
 const res = await http
@@ -81,9 +81,9 @@ const res = await http
     .expect(() => "Network Error");
 ```
 
-The beauty of the `pipe` is that can break the logics down into a smaller chunks, and these chunks is reusable and testable, you can use these chunks every where to help u complete whatever target you want to do without write duplicated code.
+`pipe` 的美妙之处在于可以将逻辑分解成细小的块，这些块是可重用和可测试的，你可以在任何地方使用这些块来帮助你完成需求，而无需编写重复的代码。
 
-In the operator system, there are three operator type as you can used:
+在操作符系统中，一共包含一下三种`操作符`类型：
 
 - **Begin-operator** like `get`, `post`, `put` or something like that
 - **Pipe-operator** like `pipe`
