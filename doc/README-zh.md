@@ -6,16 +6,16 @@
 
 ## 什么是 Fence🐟
 
-`Fence` 是一个基于操作符的请求库，它提供了一系列 API 来帮助您更轻松地操作请求流。因为`Fence` 默认基于 Axios，所以`Fence` 在浏览器和服务器中也可以正常工作。
+`Fence` 是一个基于操作符的请求库，它提供了一系列 API 让你更轻松处理作请求流。因为`Fence` 默认基于 Axios，所以`Fence` 在浏览器和服务器中也可以正常工作。
 
 ## 特性
 
-- 🌊 **基于操作符**`Fence`整个系统是基于操作符的，并且内置了 8 个 操作符。你可以自定义一些`操作符`来配合内置的`操作符`一起完成数据请求。
+- 🌊 **基于操作符** `Fence`整个体系是基于`操作符`的，并且内置了 8 个 操作符。你也可以自定义一些`操作符`来配合内置的`操作符`一起完成数据请求。
 - 🍵 **面向对象** 如果你喜欢`面向对象编程`，那么这个库非常适合你，并且我们会在将来支持`Function API`。
-- 🚴 **轻量级** 我们没有为用户提供很多`操作符`，因为用户可以自定义 操作符 ，并将它们组合成新的 操作符。
-- 🙅‍♂️ **完善的错误处理系统** 许多开发人员经常忘记或错误地处理来自请求流的错误，`Fence` 将强制您处理这些错误或显式忽略这些错误，它可以你思路更加清晰。
+- 🚴 **轻量级** 我们没有为用户提供过多的`操作符`，因为用户可以自定义`操作符`，并将它们组合成新的`操作符`。
+- 🙅‍♂️ **完善的错误处理体系** 许多开发人员经常忘记或不正确地处理来自请求流的错误，`Fence` 会强制您处理这些错误或显式忽略这些错误。
 - ⚙️ **可拆卸** 你可以根据需求来决定要使用那些`操作符`，也可以删除一些没有使用到的`操作符`。
-- 🏹️ **灵活性** 你可以结合现有的`操作符`来创造更多的。`操作符`。
+- 🏹️ **灵活性** 你可以结合现有的`操作符`来创造更多的`操作符`。
 
 ## 用法
 
@@ -29,7 +29,7 @@ yarn add @wizardoc/fence
 npm i @wizardoc/fence
 ```
 
-### 案例
+### 简单案例
 
 ```ts
 import {
@@ -65,13 +65,14 @@ main();
 
 > 你可以查看更多详细的[案例](https://github.com/wizardoc/http-request/tree/main/example).
 
-## 操作符系统
+## 操作符体系
 
-操作符系统是`Fence`的核心，换句话说，`Fence`是基于操作系统设计的。
+`Fence`是基于操作符体系设计的，同样操作符体系也是`Fence`的核心。
 
 <img src="https://github.com/wizardoc/http-request/blob/main/doc/request-flow.png" />
 
-如你所见，请求就像一个流，你可以定义一些管道操作符，在数据响应之前终止请求。例如，我想从 GitHub 获取 `youncccat` 的 `avatar_url`。
+如你所见，请求就像一个流，你可以定义一些管道操作符，在数据响应之前终止请求。
+例如，我想从 GitHub 获取 `youncccat` 的 `avatar_url`。
 
 ```ts
 const res = await http
@@ -81,29 +82,29 @@ const res = await http
     .expect(() => "Network Error");
 ```
 
-`pipe` 的美妙之处在于可以将逻辑分解成细小的块，这些块是可重用和可测试的，你可以在任何地方使用这些块来帮助你完成需求，而无需编写重复的代码。
+`pipe` 的巧妙之处在于可以将逻辑分解成细小的块，这些块是可复用和可测试的，你可以在任何地方使用这些块来帮你完成需求，而无需编写重复的代码。
 
-在操作符系统中，一共包含一下三种`操作符`类型：
+在操作符体系中，一共包含一下三种`操作符`类型：
 
-- **Begin-operator** like `get`, `post`, `put` or something like that
-- **Pipe-operator** like `pipe`
-- **Terminal-operator** like `unwrap`, `expect`, `match`
+- **开始操作符** 像 `get`, `post`, `put` 或类似的
+- **管道操作符** 像 `pipe`
+- **终止操作符** 想 `unwrap`, `expect`, `match`
 
-### Begin operator
+### 开始操作符
 
-The begin-operator is located beginning of the entire request flow, that means you should invoke a begin-operator to start a request flow.
+开始操作符位于整个请求流的开头，你应该调用开始操作符位来启动请求流。
 
 ```ts
 http.get("/");
 ```
 
-The `get` just is a begin-operator, that can send `GET` request to the target server, but more interested things is you can also invoke a begin-operator after the another begin-operator, for instance you can invoked like the following code:
+`get`仅仅是一个开始操作符，它可以向目标服务器发送`GET`请求，你可以在另一个开始操作符之后调用开始操作符，就像下面的代码：
 
 ```ts
 http.get("/").post("/foo").get("/bar");
 ```
 
-And you can also mixin some pipe-operator
+你也可以混入一些管道操作符
 
 ```ts
 http
@@ -112,9 +113,9 @@ http
   .post((avatar) => avatar);
 ```
 
-This gracefully solve the problem of request nesting. In above example, the response data of the `get` request is the dependencies of the `post` request, so we have to wait for the `get` request to complete and get `avatar` from the response data before send the `post` request, cause the `post` request need the `avatar` as the url of the request.
+这样就优雅的解决了请求嵌套的问题。在上面的例子中，`get` 请求的响应数据是`post` 请求的依赖，所以我们必须等待`get` 请求完成并从响应数据中获取`avatar`，然后发送`post` `请求`。
 
-In the `fetch API`, maybe we can do this with:
+在 `fetch API` 中，我们也许会这样做：
 
 ```ts
 fetch("/")
@@ -122,7 +123,7 @@ fetch("/")
   .then(({ data }) => fetch(data.avatar_url, { method: "POST" }));
 ```
 
-As you can see, this workaround will leads `callback hell`, for example, if I have five requests that interdependent, using `Fetch API` :
+如果我有五个相互依赖的请求，使用“Fetch API”的情况下，将会导致“回调地狱”：
 
 ```ts
 fetch("/")
@@ -143,37 +144,37 @@ fetch("/")
 
 ```
 
-It's looks ugly and difficult to maintain.
+它不太美观并且难以维护 。
 
-> Notice: if you have try to run the above `Fence` example code, you will found the request does not send out, A simple reason is that you forget handing errors that probably occur from the request flow, so the real request will not send out. `Fence` will against any request that does not handing errors, it can help you to make a robust application, force you to handing errors. In the rest of the chapter, you will learned terminal-operator, that can handing error when sending the real request out.
+> 注意：如果你尝试运行以上的`Fence`示例代码，你会发现请求没有发送出去，原因在于你忘记了在请求流中可能发生的错误，所以请求不会发送出去。 `Fence` 反对任何不处理错误的请求，你必须处理错误的情况，从而帮助您编写一个健壮的应用程序。在本章的其余部分，将介绍终止操作符，它可以在发送真实请求时处理错误。
 
-### Pipe operator
+### 管道操作符
 
-Also you can invoke pipe-operator before terminated the request flow to process data. And the `Fence` contain a build-in pipe-operator named `pipe`.
+你可以使用管道操作符在终止请求流之前处理数据。 `Fence` 内置了 `pipe` 的管道操作符。
 
 ```ts
 http.get("/foo").pipe(data => /** Do whatever you wanna do */).unwrap()
 ```
 
-> Notice: the `pipe` operator will not invoked when the request occurred errors.
+> 注意：当请求发生错误时，`pipe` 操作符不会被调用。
 
-### Terminal operator
+### 终止操作符
 
-Terminal-operator usually contain error-handing logic, so in order to send a request, you have to invoke only one terminal-operator on invoke chain.
+通常情况下终止操作符包含错误处理逻辑 ，发送请求中只需在调用链上使用一个终止操作符。
 
 ```ts
 http.get().post().pipe().unwrap();
 ```
 
-If you forget to write terminal-operator, this request will not be send out, this design is by intent, cause you have to handing errors for every request to make your application robust more.
+如果你忘记使用终止操作符，这个请求将不会被发送出去。这是有意而为之的，你必须为每个请求处理错误来确保程序的健壮性。
 
-The `Fence` have three build-in terminal-operator, we will cover in following chapters.
+`Fence` 内置了三个终止操作符，我们将在接下来的章节中介绍。
 
-### Define your own operator
+### 自定义操作符
 
-Excepts that you can use the build-in operators, you can also define your own operator by `Fence operator API`.
+除了可以使用内置操作符，还可以通过`Fence operator API`来自定义操作符。
 
-For instance, you wanna know the request is sending successful or not in outside context.
+例如，你想在外部上下文中知道请求发送是否成功。
 
 ```ts
 const res = http.get("/foo").unwrap();
@@ -184,7 +185,7 @@ const res = http.get("/foo").unwrap();
 // ...
 ```
 
-Though I can't invoke a pipe-operator to process this condition, cause the `pipe` operator will not invoked when the request occurred errors. So we can define a own operator to process this condition.
+请求发生错误时不会调用管道操作符，所以无法使用管道操作符来处理这种情况，我们可以自定义一个操作符来处理这个情况。
 
 ```ts
 import {
@@ -217,7 +218,7 @@ export class WithOk implements PipeOperatorExec {
 }
 ```
 
-And then we should register this operator in our application.
+然后在我们的应用程序中注册这个操作符。
 
 ```ts
 @HTTPModule({
@@ -228,7 +229,7 @@ And then we should register this operator in our application.
 export class AppHttpModule {}
 ```
 
-Now let's send a request and do something in outside when the request is success to send out.
+现在让我们发送一个请求，并在请求成功发送时在外面做一些事情。
 
 ```ts
 const { ok } = http.get("/foo").withOk().unwrap();
@@ -238,11 +239,11 @@ if (ok) {
 }
 ```
 
-Also you can define a lot of interesting operator to resolve your problem, let's happy hacking!
+你也可以定义很多有趣的操作符来解决你的问题。
 
-## Module
+## 模板
 
-In order to use `Fence`, you need to define a root module that contain error handing function and some configure, it looks like:
+使用`Fence`，你需要定义一个包含错误处理和配置项的根模块，例如：
 
 ```ts
 @HTTPModule({
@@ -253,9 +254,9 @@ In order to use `Fence`, you need to define a root module that contain error han
 export class AppHttpModule {}
 ```
 
-### Server config
+### 服务器配置
 
-The `ServerConfigInfo` is the configure of the endpoint of the backend server:
+`ServerConfigInfo` 是后端服务器的配置：
 
 ```ts
 export interface ServerConfigInfo {
@@ -266,13 +267,13 @@ export interface ServerConfigInfo {
 }
 ```
 
-The `ServerConfigInfo` is resolved as `[protocol]://[baseUrl]:[port][prefix]` in fence
+在 fence 中`ServerConfigInfo` 被解析为`[protocol]://[baseUrl]:[port][prefix]`
 
-## Interceptors
+## 拦截器
 
-The principle of interceptors in `Fence` is similar with `Axios Interceptor`, cause the `Fence` is based-on Axios, but difference with Axios.
+因为`Fence`是基于 Axios，所以拦截器的原理与`Axios Interceptor`类似，但与 Axios 有所不同。
 
-**Response interceptor**
+**响应拦截器**
 
 ```ts
 import { HTTPResponseInterceptor, AxiosResponse } from "@wizardoc/fence";
@@ -284,7 +285,7 @@ export class Bar implements HTTPResponseInterceptor {
 }
 ```
 
-**Request interceptor**
+**请求拦截器**
 
 ```ts
 import { HTTPRequestInterceptor, AxiosRequestConfig } from "@wizardoc/fence";
@@ -298,7 +299,7 @@ export class Foo implements HTTPRequestInterceptor {
 }
 ```
 
-And then you should register your interceptors in the root module:
+你应该在根模块中注册你的拦截器：
 
 ```ts
 @HTTPModule({
@@ -308,11 +309,11 @@ And then you should register your interceptors in the root module:
 export class AppHttpModule {}
 ```
 
-Now everything is working fine :)
+现在一切工作正常:)
 
-### Example
+### 例子
 
-Let's define a logger interceptor to print request url when send request.
+让我们定义一个记录拦截器在发送请求时打印请求 url。
 
 ```ts
 import {
@@ -347,19 +348,19 @@ const http = HTTPFactory.create(AppModule);
 http.get("/users/youncccat").unwrap();
 ```
 
-**output**
+**输出**
 
 ```sh
 request ===>  https://api.github.com/users/youncccat
 ```
 
-## Error handing
+## 错误处理
 
-Error handing is a important things in request, if you forget handing errors, it could occur unexpect error in your application. But if you write all error handing logic in same place to make a global error handler, it dose not flexible, maybe you wanna process some error by separately. So we introduce the three ways to handle errors, of course you can defined your own error handler in terminal operator.
+错误处理是请求中至关重要的，如果您忘记处理错误，你的应用程序中则可能发生意外的错误。但是如果你编写全局的请求错误处理逻辑，它就失去了灵活性。当然你可以在终止操作符中定义自己的错误处理逻辑，我们也提供了三种处理错误的方式。
 
-### 0x1 Global error handing
+### 0x1 全局错误处理
 
-We often handle some exceptions in the request flow, also we need a "global space" to handing the error that come from every request, so we need to use a terminal-operator named `expect`, that receive a callback that's sign like `() => string`, the return value of the callback is a error message which you wanna provide to the "global space".
+在处理请求流中的一些异常时，我们通常需要一个`global space`来处理来自每个请求的错误，为此我们提供了`expect`的终止操作符，它接收一个类似` () => string`的回调函数，函数的返回值是提供给`global space`的错误消息。
 
 ```
 http.get('/foo').expect(() => 'Cannot visit foo')
@@ -369,9 +370,9 @@ http.get('/bar').expect(() => 'Cannot visit bar')
 http.post('/user').expect(() => 'Cannot create the user')
 ```
 
-And then you can get these error message in `errorInteract` function, as you can see that the `errorInteract` just is "global space" that we talk about in above.
+`errorInteract` 就是我们上面讨论的`global space`，你可以在 `errorInteract` 函数中得到这些错误信息。
 
-In order to define the "global space", you have to make the `AppHttpModule` implements `ErrorInteractModule` interface, and implements the `errorInteract` function, refer the following code snap:
+为了定义`global space`，你必须让`AppHttpModule`实现`ErrorInteractModule`接口，并实现`errorInteract`功能，参考如下：
 
 ```ts
 @HTTPModule({
@@ -389,11 +390,11 @@ export class AppHttpModule implements ErrorInteractModule {
 }
 ```
 
-> Notice: if you are not familiar about the `Expect` operator, it's ok we will cover `operator` soon.
+> 注意：如果您不熟悉 `Expect` 运算符，没关系，我们很快就会介绍它。
 
-That means if the `http.get('/foo').expect(() => 'Cannot visit foo')` was fail, the page will alert `Cannot visit foo`, but it doesn't make sense, cause there have a lot of type of the error, so actually the "error message" is just like if there have no error types is matched, then return the "error message".
+如果 `http.get('/foo').expect(() => 'Cannot visit foo')` 失败，页面会提示 `Cannot visit foo`，但这没有意义，因为请求错误的类型很多，如果没有匹配的错误类型，则会默认返回“错误信息”。
 
-So maybe we will write codes that something like this:
+所以我们会处理：
 
 ```ts
 @HTTPModule({
@@ -415,11 +416,11 @@ export class AppHttpModule implements ErrorInteractModule {
 }
 ```
 
-And maybe you notice that we don't have to use ui-related function(like `toast`, `alert`, `modal` etc.) in the `Expect`'s callback, cause we wanna separate ui-related code and describe error code, so the `Expect`'s callback just return error message without describe how to show the error message is the page, and we can define these code in `errorInteract` to interact with ui(page).
+你也许注意到了，不必在 `Expect` 的回调中使用 ui 相关的函数（如 `toast`、`alert`、`modal` 等），我们应该对 ui 相关的代码和描述错误代码进行了解耦，`Expect`的回调只负责返回错误信息，`errorInteract`中定义这些错误信息如何在页面中展示。
 
-### 0x2 Do nothing with handling errors
+### 0x2 不处理错误
 
-Sometimes you don't wanna handing these errors, you just wanna throw them to outer layer just like `throw`, and write down the logic of handing error in outer layer and catch them, so you can use the `unwrap` terminal-operator that does not do anything extra with handing errors, but just throw it as a raw Axios error.
+有些情况你不想处理这些错误，你想使用`throw`将错误抛出，在外层捕获它们并做错误处理的逻辑。这时你可以使用`unwrap`终止操作符，它不会对错误做任何操作，只是将其当做原始 Axios 错误抛出。
 
 ```ts
 const getFoo = () => http.get("/foo").unwrap();
@@ -439,15 +440,15 @@ async function main() {
 main();
 ```
 
-### 0x3 Handing errors by separately
+### 0x3 单独处理错误
 
-Though the `unwrap` terminal-operator also can handing errors separately, but you have to write annoying `try-catch` block, and the error will throw to outer layer, maybe u just wanna process it in current layer, you can use `match` terminal-operator, the sign of `match` just like this:
+虽然 `unwrap` 终止操作符也可以单独处理错误，但是你必须编写烦人的 `try-catch` ，并且错误会抛出到外层，也许你只是想在当前层处理它，你可以使用 ` match` 终止运算符：
 
 ```ts
 type Match = ((data: unknown) => unknown, (err: AxiosError) => unknown)) => Promise<unknown>
 ```
 
-The `match` function receive two callback named `successful callback` and `failure callback`, if the request is successful, the `successful callback` will be invoked, conversely the `failure callback` will be invoked.
+`match` 接受`successful callback` 和`failure callback` 两个回调，如果请求成功，则会执行`successful callback`，反之会执行`failure callback`。
 
 ```ts
 const res = http.get("/foo").match(
@@ -456,11 +457,11 @@ const res = http.get("/foo").match(
 )
 ```
 
-If you familiar Rust programming, you should also familiar to the `match` :)
+如果你了解 Rust 编程，你应该也熟悉 `match` :)
 
-## Examples
+## 更多案例
 
-We have write some examples in [Examples](https://github.com/wizardoc/http-request/tree/main/example), you can access the link for more detail.
+你可以访问[这里](https://github.com/wizardoc/http-request/tree/main/example)了解更多细节。
 
 ## License
 
