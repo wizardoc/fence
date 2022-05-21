@@ -1,5 +1,5 @@
 {
-  "name": "@wizardoc/http-request",
+  "name": "@wizardoc/fence",
   "version": "2.0.1",
   "main": "dist/index.js",
   "license": "MIT",

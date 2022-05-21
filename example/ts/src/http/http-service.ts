@@ -21,19 +21,19 @@ export class AppModule implements ErrorInteractModule {
 export async function main() {
   const http = HTTPFactory.create(AppModule);
 
-  // const { avatar, ok } = await http
-  // .get("/users/youncccat")
-  // .pipe(({ data }) => data.avatar_url)
-  // .pipe((avatar) => ({ avatar }))
-  // .withOk()
-  // .expect(() => "Network Error");
+  const { avatar, ok } = await http
+    .get("/users/mistricky")
+    .pipe(({ data }) => data.avatar_url)
+    .pipe((avatar) => ({ avatar }))
+    .withOk()
+    .expect(() => "Network Error");
 
-  const res = await http
-    .get("/urs/youncccat")
-    .post("/")
-    .expect(() => "");
+  // const res = await http
+  //   .get("/urs/youncccat")
+  //   .post("/")
+  //   .expect(() => "");
 
-  console.info(res);
+  console.info(avatar, ok);
 }
 
 main();

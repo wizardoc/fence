@@ -53,8 +53,7 @@ export class AppHttpModule implements ErrorInteractModule {
 }
 
 export async function main() {
-  const http = HTTPFactory.create(AppModule);
-
+  const http = HTTPFactory.create(AppHttpModule);
   const res = await http.get("/users/youncccat").expect(() => "Network Error");
 
   console.info(res);
