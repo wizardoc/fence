@@ -7,7 +7,7 @@ import { OperatorResponse, OperatorService, ServerConfig } from "../services";
 import { BrowserClient } from "../clients";
 
 const NOT_A_MODULE_ERROR_MESSAGE =
-  "HTTP Factory cannot create a service base on the module, please make sure the params has been decorated by @HTTPModule.";
+  "HTTP Factory cannot create a service base on this module, please make sure the params has been decorated by @HTTPModule.";
 
 export class HTTPFactory {
   static create(Module: any): OperatorResponse {

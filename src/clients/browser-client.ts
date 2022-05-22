@@ -104,12 +104,6 @@ export class BrowserClient {
     return request();
   }
 
-  // private sendRequest<R>(request: Request<R>): any {
-  //   const operatorService = new OperatorService(this.options.operators);
-
-  //   return operatorService.parseOperators(this.options.catcher, request);
-  // }
-
   private join(path: string): string {
     if (path.startsWith("http")) {
       return path;

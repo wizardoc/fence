@@ -11,6 +11,10 @@ export class Expect implements TerminalOperatorExec {
     { catcher, value, err }: TerminalOperatorContext,
     cb: OperatorCallback
   ): void {
-    catcher(cb(value) as string, err);
+    const errMsg = cb(value) as string;
+
+    if (!!err) {
+      catcher(errMsg, err);
+    }
   }
 }
